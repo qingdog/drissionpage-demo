@@ -1,4 +1,5 @@
 import os
+import platform
 import time
 import traceback
 
@@ -100,6 +101,10 @@ def click_cloudflare_turnstile(tab: MixTab, button: ChromiumElement = None):
 
 def main():
     options = ChromiumOptions().set_load_mode('none')
+    os_name = platform.system()
+    if os_name != "Windows":
+        options.headless(on_off=True)
+
     # browser_path = find_chrome.main()
     options.set_paths(browser_path=None)  # 设置浏览器路径
     '''arguments = ["--auto-open-devtools-for-tabs", ]  # "--headless"]
@@ -111,8 +116,8 @@ def main():
     load_dotenv()
     token = os.getenv("EGG_SESS")
     time.sleep(1)
-    # god_checkin(tab, token)
-    god_index(tab, token)
+    god_checkin(tab, token)
+    # god_index(tab, token)
 
     print(f"cf-turnstile-response: {etree.HTML(tab.html).xpath('//*[@name="cf-turnstile-response"]')}")
 
