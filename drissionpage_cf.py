@@ -103,7 +103,7 @@ def click_cloudflare_turnstile(tab: MixTab, button: ChromiumElement = None):
 def main():
     chromium_options = ChromiumOptions()
     os_name = platform.system()
-    if os_name == "Windows":
+    if os_name != "Windows":
         user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
         chromium_options.headless(on_off=True).set_user_agent(user_agent).set_argument('--window-size', '1920, 1080')
         '''chromium_options.set_argument("--no-sandbox")
