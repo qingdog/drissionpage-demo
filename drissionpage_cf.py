@@ -34,17 +34,20 @@ def god_checkin(tab: MixTab, token: str):
     tab.get("https://gptgod.online/#/token?tab=rule")
     # tab.scroll.down(20)
 
-    buttons = tab.eles("css:button.ant-btn.css-1jr6e2p.ant-btn-default.ant-btn-color-default.ant-btn-variant-outlined")
-    if len(buttons) > 0:
-        button_el = buttons[0]
-        # 滚动页面使自己可见
-        # button_el.scroll.to_see()
-        # 按类型查找 同类型样式的多个按钮
-        print(button_el.text)  # 签到
-        button_el.click()
-        print("click...")
-        tab.wait.load_start()  # 等待页面进入加载状态
-        click_cloudflare_turnstile(tab, button_el)
+    # buttons = tab.eles("css:button.ant-btn.css-1jr6e2p.ant-btn-default.ant-btn-color-default.ant-btn-variant-outlined")
+    buttons = tab.eles("xpath=//button[span[text()='签到 领取2000积分']]")
+    if len(buttons) == 0:
+        print("没有找到按钮")
+        return
+    button_el = buttons[0]
+    # 滚动页面使自己可见
+    # button_el.scroll.to_see()
+    # 按类型查找 同类型样式的多个按钮
+    print(button_el.text)  # 签到
+    button_el.click()
+    print("click...")
+    tab.wait.load_start()  # 等待页面进入加载状态
+    click_cloudflare_turnstile(tab, button_el)
 
 
 def click_cloudflare_turnstile(tab: MixTab, button: ChromiumElement = None):
