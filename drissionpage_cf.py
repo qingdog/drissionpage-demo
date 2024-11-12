@@ -32,7 +32,8 @@ def god_checkin(tab: MixTab, token: str):
     tab.set.cookies(cookies)
     print(tab.cookies())
     tab.get("https://gptgod.online/#/token?tab=rule")
-    # tab.scroll.down(20)
+    tab.get("https://gptgod.site/#/token?tab=rule")
+    tab.scroll.down(20)
 
     # buttons = tab.eles("css:button.ant-btn.css-1jr6e2p.ant-btn-default.ant-btn-color-default.ant-btn-variant-outlined")
     tab.wait(30, 30)
@@ -52,8 +53,8 @@ def god_checkin(tab: MixTab, token: str):
         print(e)
     finally:
         print(f"{button_el.states.has_rect} click...")
-        button_el.click()
-        # button_el.click(by_js=True)
+        # button_el.click()
+        button_el.click(by_js=True)
         start_time = time.time()
         tab.wait.load_start()  # 等待页面进入加载状态
         print(time.time() - start_time)
