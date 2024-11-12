@@ -35,6 +35,7 @@ def god_checkin(tab: MixTab, token: str):
     # tab.scroll.down(20)
 
     # buttons = tab.eles("css:button.ant-btn.css-1jr6e2p.ant-btn-default.ant-btn-color-default.ant-btn-variant-outlined")
+    tab.wait(10, 10)
     buttons = tab.eles("xpath=//button[span[text()='签到 领取2000积分']]")
     if len(buttons) == 0:
         print("没有找到按钮")
@@ -45,7 +46,7 @@ def god_checkin(tab: MixTab, token: str):
     # 按类型查找 同类型样式的多个按钮
     print(button_el.text)  # 签到
     try:
-        # print(f"{button_el.rect.click_point} click...")
+        print(f"{button_el.rect.click_point} click...")
         print(f"{button_el.rect.viewport_click_point} viewport_click_point...")
     except Exception as e:
         print(e)
