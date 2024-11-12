@@ -81,7 +81,8 @@ def click_cloudflare_turnstile(tab: MixTab, button: ChromiumElement = None):
                 # cf_turnstile_ele
                 print(width, height)
                 print(tab.eles('css:#cf-turnstile')[0].rect.size)
-                print(tab.eles('css:button.ant-btn.css-hs5kb5.ant-btn-text.ant-btn-color-default.ant-btn-variant-text')[4].rect.size)
+                print(tab.eles('css:button.ant-btn.css-hs5kb5.ant-btn-text.ant-btn-color-default.ant-btn-variant-text')[
+                          4].rect.size)
 
                 # cf_turnstile_ele.click(by_js=True)
                 # 获取元素大小
@@ -100,17 +101,22 @@ def click_cloudflare_turnstile(tab: MixTab, button: ChromiumElement = None):
 
 
 def main():
-    options = ChromiumOptions().set_load_mode('none')
+    chromium_options = ChromiumOptions()
     os_name = platform.system()
-    if os_name != "Windows":
-        options.headless(on_off=True)
-
-    # browser_path = find_chrome.main()
-    options.set_paths(browser_path=None)  # 设置浏览器路径
-    '''arguments = ["--auto-open-devtools-for-tabs", ]  # "--headless"]
-    for argument in arguments:
-        options.set_argument(argument)'''
-    chromium_page = ChromiumPage(options)
+    if os_name == "Windows":
+        user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
+        chromium_options.headless(on_off=True).set_user_agent(user_agent).set_argument('--window-size', '1920, 1080')
+        '''chromium_options.set_argument("--no-sandbox")
+        chromium_options.set_argument("--disable-setuid-sandbox")
+        chromium_options.set_argument('--start-maximized')
+        chromium_options.set_argument("--headless=new")  # 无界面系统添加'''
+        # chromium_options.incognito()  # chrome.exe --incognito
+    else:
+        chromium_options.headless(on_off=False)
+    # 设置不加载图片、静音
+    chromium_options.no_imgs(True).mute(True)
+    # https://drissionpage.cn/versions/4.0.x #linux取消了自动无头模式浏览器，使用 chrome 关键字路径
+    chromium_page = ChromiumPage(chromium_options.set_load_mode('normal').set_paths(browser_path=None))
     tab = Chromium().latest_tab
 
     load_dotenv()
@@ -120,6 +126,7 @@ def main():
     # god_index(tab, token)
 
     print(f"cf-turnstile-response: {etree.HTML(tab.html).xpath('//*[@name="cf-turnstile-response"]')}")
+    if os_name != "Windows": chromium_page.quit()  # 关闭浏览器
 
 
 if __name__ == '__main__':

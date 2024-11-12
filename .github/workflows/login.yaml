@@ -1,4 +1,4 @@
-name: Run drissionpage_god
+name: Run drissionpage_cf
 
 on:
   workflow_dispatch:
@@ -34,5 +34,5 @@ jobs:
         env:
           EGG_SESS: ${{ secrets.EGG_SESS }}  #
         run: |
-          python drissionpage_god.py
+          python drissionpage_cf.py
           
