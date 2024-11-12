@@ -35,7 +35,7 @@ def god_checkin(tab: MixTab, token: str):
     # tab.scroll.down(20)
 
     # buttons = tab.eles("css:button.ant-btn.css-1jr6e2p.ant-btn-default.ant-btn-color-default.ant-btn-variant-outlined")
-    tab.wait(10, 10)
+    tab.wait(30, 30)
     buttons = tab.eles("xpath=//button[span[text()='签到 领取2000积分']]")
     if len(buttons) == 0:
         print("没有找到按钮")
@@ -52,7 +52,7 @@ def god_checkin(tab: MixTab, token: str):
         print(e)
     finally:
         print(f"{button_el.states.has_rect} click...")
-        button_el.click()
+        button_el.click(by_js=True)
         tab.wait.load_start()  # 等待页面进入加载状态
         click_cloudflare_turnstile(tab, button_el)
 
