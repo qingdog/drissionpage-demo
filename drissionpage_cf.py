@@ -45,7 +45,9 @@ def god_checkin(tab: MixTab, token: str):
     # 按类型查找 同类型样式的多个按钮
     print(button_el.text)  # 签到
     button_el.click()
-    print("click...")
+    print(f"{button_el.rect.click_point} click...")
+    print(f"{button_el.rect.viewport_click_point} click...")
+    print(f"{button_el.states.has_rect} click...")
     tab.wait.load_start()  # 等待页面进入加载状态
     click_cloudflare_turnstile(tab, button_el)
 
@@ -57,7 +59,10 @@ def click_cloudflare_turnstile(tab: MixTab, button: ChromiumElement = None):
     elements = tab.eles('css:#cf-turnstile')
     if len(elements) == 0:
         print("没有找到#cf-turnstile")
-        return
+        # return
+        tab.wait(40, 40)
+        elements = tab.eles('css:#cf-turnstile')
+        if len(elements) == 0: return
     cf_turnstile_ele = elements[0]
     width, height = cf_turnstile_ele.rect.size
     print(f"{width, height}: {cf_turnstile_ele}")
