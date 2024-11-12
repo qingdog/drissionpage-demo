@@ -32,7 +32,6 @@ def god_checkin(tab: MixTab, token: str):
     tab.set.cookies(cookies)
     print(tab.cookies())
     tab.get("https://gptgod.online/#/token?tab=rule")
-    tab.get("https://gptgod.site/#/token?tab=rule")
     tab.scroll.down(20)
 
     # buttons = tab.eles("css:button.ant-btn.css-1jr6e2p.ant-btn-default.ant-btn-color-default.ant-btn-variant-outlined")
