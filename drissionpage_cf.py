@@ -44,12 +44,16 @@ def god_checkin(tab: MixTab, token: str):
     # button_el.scroll.to_see()
     # 按类型查找 同类型样式的多个按钮
     print(button_el.text)  # 签到
-    button_el.click()
-    print(f"{button_el.rect.click_point} click...")
-    print(f"{button_el.rect.viewport_click_point} click...")
-    print(f"{button_el.states.has_rect} click...")
-    tab.wait.load_start()  # 等待页面进入加载状态
-    click_cloudflare_turnstile(tab, button_el)
+    try:
+        # print(f"{button_el.rect.click_point} click...")
+        print(f"{button_el.rect.viewport_click_point} viewport_click_point...")
+    except Exception as e:
+        print(e)
+    finally:
+        print(f"{button_el.states.has_rect} click...")
+        button_el.click()
+        tab.wait.load_start()  # 等待页面进入加载状态
+        click_cloudflare_turnstile(tab, button_el)
 
 
 def click_cloudflare_turnstile(tab: MixTab, button: ChromiumElement = None):
