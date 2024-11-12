@@ -73,9 +73,9 @@ def click_cloudflare_turnstile(tab: MixTab, button: ChromiumElement = None):
     print(f"{width, height}: {cf_turnstile_ele}")
     cf_turnstile_ele.click.right()
     # 点击元素上中部，x相对左上角向右偏移50，y保持在元素中点
-    # cf_turnstile_ele.click.at(offset_x=28, offset_y=32, button="right", count=1)
+    cf_turnstile_ele.click.at(offset_x=28, offset_y=32, button="right", count=1)
     time.sleep(2)
-    cf_turnstile_ele.click.at(offset_x=28, offset_y=32)  # 正中复选框
+    # cf_turnstile_ele.click.at(offset_x=28, offset_y=32)  # 正中复选框
 
     print("tab.wait.load_start...")
     tab.get_screenshot(path='tmp', name='wait_load_start.jpg', full_page=True)
@@ -91,15 +91,15 @@ def click_cloudflare_turnstile(tab: MixTab, button: ChromiumElement = None):
         top_left, top_right, bottom_right, bottom_left = cf_turnstile_ele.states.has_rect
         print(top_left, top_right, bottom_right, bottom_left)
         if top_left:
-            width, height = cf_turnstile_ele.rect.size
-            
+            width, height = tab.eles('css:#cf-turnstile')[0].rect.size
+            print(f"{width, height}: {tab.eles('css:#cf-turnstile')[0]}")
             tab.eles('css:#cf-turnstile')[0].click.at(offset_x=28, offset_y=32)
             tab.wait(1,2)
             print(tab.eles('css:button.ant-btn.css-hs5kb5.ant-btn-text.ant-btn-color-default.ant-btn-variant-text')[4].rect.size)
             tab.wait(1,2)
-            tab.eles('css:button.ant-btn.css-hs5kb5.ant-btn-text.ant-btn-color-default.ant-btn-variant-text')[4].click.at(offset_x=28, offset_y=32) 
+            tab.eles('css:button.ant-btn.css-hs5kb5.ant-btn-text.ant-btn-color-default.ant-btn-variant-text')[4].click.at(offset_x=28, offset_y=32)
             tab.wait(1,2)
-            tab.eles("xpath=//button[span[text()='签到 领取2000积分']]")[0].click.at(offset_x=28, offset_y=32) 
+            tab.eles("xpath=//button[span[text()='签到 领取2000积分']]")[0].click.at(offset_x=28, offset_y=32)
             tab.wait(1,2)
             # cf_turnstile_ele.click(by_js=True)
             # 获取元素大小
