@@ -73,18 +73,20 @@ def click_cloudflare_turnstile(tab: MixTab, button: ChromiumElement = None):
         elements = tab.eles('css:#cf-turnstile')
         if len(elements) == 0: return
     cf_turnstile_ele = elements[0]
-    width, height = cf_turnstile_ele.rect.size
-    print(f"{width, height}: {cf_turnstile_ele}")
-    cf_turnstile_ele.click.right()
-    # 点击元素上中部，x相对左上角向右偏移50，y保持在元素中点
-    cf_turnstile_ele.click.at(offset_x=28, offset_y=32, button="right", count=1)
-    time.sleep(2)
-    # cf_turnstile_ele.click.at(offset_x=28, offset_y=32)  # 正中复选框
+    '''
+    # width, height = cf_turnstile_ele.rect.size
+    # print(f"{width, height}: {cf_turnstile_ele}")'''
 
-    print("tab.wait.load_start...")
-    tab.get_screenshot(path='tmp', name='wait_load_start.jpg', full_page=True)
+    # cf_turnstile_ele.click.right()
+    # 点击元素上中部，x相对左上角向右偏移50，y保持在元素中点
+    # cf_turnstile_ele.click.at(offset_x=28, offset_y=32, button="right", count=1)
+    time.sleep(2)
+    cf_turnstile_ele.click.at(offset_x=28, offset_y=32)  # 正中复选框
+    print("86 tab.wait.load_start...")
+    # tab.get_screenshot(path='tmp', name='wait_load_start.jpg', full_page=True)
     tab.wait.load_start()  # 等待页面加载
-    tab.get_screenshot(path='tmp', name='wait_done.jpg', full_page=True)
+    # tab.get_screenshot(path='tmp', name='wait_done.jpg', full_page=True)
+
     if button:
         print(button.text)
         if button.text == "今天已签到": return
@@ -97,32 +99,30 @@ def click_cloudflare_turnstile(tab: MixTab, button: ChromiumElement = None):
         if top_left:
             width, height = tab.eles('css:#cf-turnstile')[0].rect.size
             print(f"{width, height}: {tab.eles('css:#cf-turnstile')[0]}")
-            tab.eles('css:#cf-turnstile')[0].click.at(offset_x=28, offset_y=32)
-            tab.wait(1,2)
-            print(tab.eles('css:button.ant-btn.css-hs5kb5.ant-btn-text.ant-btn-color-default.ant-btn-variant-text')[4].rect.size)
-            tab.wait(1,2)
-            tab.eles('css:button.ant-btn.css-hs5kb5.ant-btn-text.ant-btn-color-default.ant-btn-variant-text')[4].click.at(offset_x=28, offset_y=32)
-            tab.wait(1,2)
-            tab.eles("xpath=//button[span[text()='签到 领取2000积分']]")[0].click.at(offset_x=28, offset_y=32)
-            tab.wait(1,2)
-            # cf_turnstile_ele.click(by_js=True)
+            # tab.eles('css:#cf-turnstile')[0].click.at(offset_x=28, offset_y=32)
+            tab.wait(1, 2)
+
             # 获取元素大小
-            width, height = tab.run_js("""
-                    const element = document.querySelector('#cf-turnstile');  // 替换为你的元素选择器
-                    if (element) {
-                        const rect = element.getBoundingClientRect();
-                        console.log("element.getBoundingClientRect"+rect)
-                        return rect.width, rect.height;
-                    } else {
-                        return null, null;
-                    }
+            width = tab.run_js("""
+                console.log(document.querySelector('#cf-turnstile'))
+                return document.querySelector('#cf-turnstile').getBoundingClientRect().width;
                 """)
             print(width, height)
-            cf_turnstile_ele.click.at(width / 4, height / 2)
+            cf_turnstile_ele.click.at(width / 4, 30)
     except Exception as e:
         print(f"\033[35m{traceback.format_exc()}\033[0m")
+        w = 238
+        height = 782
+        # 40,698
     finally:
-        pass
+        ele1 = tab.eles('xpath:/html/body')  # 微信截图的position 减标签及url栏高度得到 按钮相对body的高度
+        if len(ele1) > 0:
+            time.sleep(30)
+            ele1[0].click.at(238, 720)
+            print(button.text)
+            time.sleep(30)
+            ele1[0].click.at(40, 720)
+        print(button.text)
 
 
 def main():
