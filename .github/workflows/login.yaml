@@ -6,7 +6,7 @@ on:
     - cron: "0 0 * * *"  # 每天UTC时间凌晨0点运行一次，北京时间会是当天早上 8:55 ~ 9:25
   push:
     branches:
-      - main
+      - master
 jobs:
   login:
     runs-on: ubuntu-22.04 #ubuntu-latest
