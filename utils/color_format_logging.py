@@ -1,7 +1,8 @@
+import datetime
 import logging
-import os
 import sys
-import time
+import os
+import traceback
 from typing import Literal
 
 import utils.myutil
@@ -32,57 +33,69 @@ class ColoredFormatter(logging.Formatter):
         return super().format(record)
 
 
-def create_file_handler(logging_format, log_date_format=None, style: Literal["%", "{", "$"] = "%", defaults=None):
-    """创建并返回一个文件处理器"""
-    # current_directory = os.path.dirname(os.path.abspath(__file__))
-    current_directory = utils.myutil.get_project_path()  # 存储日志的目录
-    log_path_name = os.path.join(current_directory, "logs", f'{time.strftime("%Y%m%d")}.log')
-    # if not os.path.exists(current_directory): os.makedirs(log_path_name)  # 创建目录
+def create_file_handler(log_path_name=None, log_format="%[%(asctime)] - [%(filename):%(lineno)] %(levelname) %(message)", date_format="%Y-%m-%d_%H:%M:%S",
+                        style: Literal["%", "{", "$"] = "%", defaults=None):
+    """创建并返回一个日志的文件处理器"""
+    if log_path_name is None:
+        # current_directory = os.path.dirname(os.path.abspath(__file__))
+        current_directory = utils.myutil.get_project_path()  # 存储日志的目录
+        # 获取当前日期和 ISO 日历信息
+        today = datetime.date.today()
+        year, week, _ = today.isocalendar()
+        # 构造日志文件路径：年月周
+        log_path_name = os.path.join(current_directory, "logs", f'{today.strftime("%Y%m")}_{week}.log')
+
+        # if not os.path.exists(current_directory): os.makedirs(log_path_name)  # 创建目录
 
     file_handler = logging.FileHandler(log_path_name, encoding="UTF-8", mode='a')
-    file_handler.setFormatter(logging.Formatter(fmt=logging_format, datefmt=log_date_format, style=style, defaults=defaults))
+    file_handler.setFormatter(logging.Formatter(fmt=log_format, datefmt=date_format, style=style, defaults=defaults))
     return file_handler
 
 
-def create_console_handler(logging_format, log_date_format, style: Literal["%", "{", "$"] = "%", defaults=None):
-    """创建并返回一个控制台处理器（添加颜色代码）"""
+def create_console_handler(log_format="%[%(asctime)] - [%(filename):%(lineno)] %(levelname) %(message)", date_format="%Y-%m-%d_%H:%M:%S",
+                           style: Literal["%", "{", "$"] = "%", defaults=None):
+    """创建并返回一个日志的控制台处理器（添加颜色代码）"""
     console_handler = logging.StreamHandler(sys.stdout)
-    console_handler.setFormatter(ColoredFormatter(fmt=logging_format, datefmt=log_date_format, style=style, defaults=defaults))
+    console_handler.setFormatter(ColoredFormatter(fmt=log_format, datefmt=date_format, style=style, defaults=defaults))
     return console_handler
 
 
-def configure_logging(loger_name=None):
+def configure_logging(logger_name=None, log_path=None):
     """配置日志处理器"""
-    logging_format = "{prefix}[{asctime}] - [{filename}:{lineno}] {levelname} {user}{message}"
-    log_date_format = "%Y-%m-%d_%H:%M:%S"
-    logger = logging.getLogger(loger_name)
+    log_format = "{prefix}[{asctime}] - [{filename}:{lineno}] {levelname} {user}{message}"
+    logger = logging.getLogger(logger_name)
     log_file_name = None
     if len(logger.handlers) == 0:  # 没有handler意为未使用过logger
         '''logging.basicConfig(level=logging.INFO, format=f'[%(asctime)s] - [%(filename)s:%(lineno)d] %(levelname)s %(message)s', datefmt=f"%Y-%m-%d_%H:%M:%S",
                             handlers=[logging.FileHandler(f"{time.strftime("%Y-%m-%d")}.log", encoding="UTF-8", mode='a'), logging.StreamHandler(sys.stdout)])'''
-        file_handler = create_file_handler(logging_format, log_date_format, style="{", defaults={'user': '', 'prefix': ''})
+        file_handler = create_file_handler(log_path_name=log_path, log_format=log_format, style="{", defaults={'user': '', 'prefix': ''})
         logger.addHandler(file_handler)
-        logger.addHandler(create_console_handler(logging_format, log_date_format, style="{", defaults={'user': '', 'prefix': ''}))
+        logger.addHandler(create_console_handler(log_format=log_format, style="{", defaults={'user': '', 'prefix': ''}))
         log_file_name = file_handler.baseFilename
     else:
         has_file_handler = any(isinstance(handler, logging.FileHandler) for handler in logger.handlers)
         # 修改 StreamHandler 格式
         for handler in logger.handlers:
             if isinstance(handler, logging.StreamHandler):
-                handler.setFormatter(ColoredFormatter(fmt=logging_format, datefmt=log_date_format, style="{", defaults={'user': '', 'prefix': ''}))
+                handler.setFormatter(ColoredFormatter(fmt=log_format, style="{", defaults={'user': '', 'prefix': ''}))
         # 如果没有文件处理器，则添加文件处理器
         if not has_file_handler:
-            file_handler = create_file_handler(logging_format, log_date_format)
+            file_handler = create_file_handler(log_path_name=log_path, log_format=log_format, style="{", defaults={'user': '', 'prefix': ''})
             logger.addHandler(file_handler)
             log_file_name = file_handler.baseFilename
     logger.setLevel(logging.INFO)
     return logger, log_file_name
 
 
-def main():
-    """主函数，执行日志配置"""
-    logger, log_file_name = configure_logging()
-    return logger, log_file_name
+def main(config_logger_name: str = None, log_path: str = None):
+    """
+    主函数，执行日志配置
+    :param config_logger_name: logger的名称
+    :param log_path: 记录日志的文件路径
+    :return: logger对象、记录日志的文件路径
+    """
+    logger, log_file_path = configure_logging(logger_name=config_logger_name, log_path=log_path)
+    return logger, log_file_path
 
 
 if __name__ == '__main__':
@@ -94,7 +107,8 @@ if __name__ == '__main__':
 
         color_format_logging.main()
     except Exception as e:
-        logging.critical(e, exc_info=True)
+        print(f"\033[34m{traceback.format_exc()}\033[0m")
+        logging.getLogger(logging.INFO)
 
     logging.getLogger().setLevel(logging.DEBUG)
     logging.debug("先换行再输出DEBUG级别的日志", extra={"prefix": "\n"})
