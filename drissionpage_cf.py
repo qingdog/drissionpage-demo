@@ -257,10 +257,10 @@ def main():
     if os_name != "Windows":
         user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
         chromium_options.headless(on_off=True).set_user_agent(user_agent).set_argument('--window-size', '1920, 1080')
-        chromium_options.set_argument('--start-maximized')
+        # chromium_options.set_argument('--start-maximized')
         chromium_options.set_argument("--no-sandbox")
-        chromium_options.set_argument("--disable-setuid-sandbox")
-        chromium_options.set_argument("--headless=new")  # 无界面系统添加
+        # chromium_options.set_argument("--disable-setuid-sandbox")
+        # chromium_options.set_argument("--headless=new")  # 无界面系统添加
         chromium_options.incognito(on_off=True)  # chrome.exe --incognito
     else:
         user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
@@ -305,12 +305,12 @@ def init_logger_for_script_run():
         year, week, _ = today.isocalendar()
         # 构造日志文件路径：年月周
         log_path_name = os.path.join(current_directory, "logs", f'week_{today.strftime("%Y%m")}_{week}.log')
-        _logger, log_file_path = color_format_logging.main(config_logger_name="week", log_path=log_path_name)
+        #_logger, log_file_path = color_format_logging.main(config_logger_name="week", log_path=log_path_name)
     except Exception as e:
         print(f"\033[34m{traceback.format_exc()}\033[0m")
-        logger.getLogger(logger.INFO)
+        logging.getLogger(logging.INFO)
     if _logger is None:
-        _logger = logger.getLogger()
+        _logger = logging.getLogger(logging.INFO)
     return _logger
 
 
