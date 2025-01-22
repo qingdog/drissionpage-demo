@@ -305,13 +305,11 @@ def init_logger_for_script_run():
         year, week, _ = today.isocalendar()
         # 构造日志文件路径：年月周
         log_path_name = os.path.join(current_directory, "logs", f'week_{today.strftime("%Y%m")}_{week}.log')
-        #_logger, log_file_path = color_format_logging.main(config_logger_name="week", log_path=log_path_name)
+        _logger, log_file_path = color_format_logging.main(config_logger_name="week", log_path=log_path_name)
     except Exception as e:
         print(f"\033[34m{traceback.format_exc()}\033[0m")
-        logging.getLogger().setLevel(logging.DEBUG)
-    if _logger is None:
         _logger = logging.getLogger()
-        _logger.setLevel(logging.INFO)
+        _logger.setLevel(logging.DEBUG)
     return _logger
 
 
