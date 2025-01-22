@@ -308,9 +308,10 @@ def init_logger_for_script_run():
         #_logger, log_file_path = color_format_logging.main(config_logger_name="week", log_path=log_path_name)
     except Exception as e:
         print(f"\033[34m{traceback.format_exc()}\033[0m")
-        logging.getLogger(logging.INFO)
+        logging.getLogger().setLevel(logging.DEBUG)
     if _logger is None:
-        _logger = logging.getLogger(logging.INFO)
+        _logger = logging.getLogger()
+        _logger.setLevel(logging.INFO)
     return _logger
 
 
