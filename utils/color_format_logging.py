@@ -44,9 +44,15 @@ def create_file_handler(log_path_name=None, log_format="%[%(asctime)] - [%(filen
         year, week, _ = today.isocalendar()
         # 构造日志文件路径：年月周
         log_path = os.path.join(current_directory, "logs")
+        print(log_path)
         log_path_name = os.path.join(log_path, f'{today.strftime("%Y%m")}_{week}.log')
 
-        if not os.path.exists(log_path): os.makedirs(log_path)  # 创建目录
+        if not os.path.exists(log_path):
+            os.makedirs(log_path)  # 创建目录
+        if not os.path.exists(log_path_name):
+            # 创建或打开日志文件
+            with open(log_path_name, 'a'):  # 'a' 模式：如果文件存在，追加内容；如果文件不存在，创建它
+                pass  # 这里什么也不做，因为 open 已经完成了文件创建
 
     file_handler = logging.FileHandler(log_path_name, encoding="UTF-8", mode='a')
     file_handler.setFormatter(logging.Formatter(fmt=log_format, datefmt=date_format, style=style, defaults=defaults))
