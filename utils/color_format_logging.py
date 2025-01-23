@@ -49,10 +49,12 @@ def create_file_handler(log_path_name=None, log_format="%[%(asctime)] - [%(filen
 
         if not os.path.exists(log_path):
             os.makedirs(log_path)  # 创建目录
+            print("创建目录成功。。。")
         if not os.path.exists(log_path_name):
             # 创建或打开日志文件
             with open(log_path_name, 'a'):  # 'a' 模式：如果文件存在，追加内容；如果文件不存在，创建它
                 pass  # 这里什么也不做，因为 open 已经完成了文件创建
+                print("创建日志文件成功。。。")
 
     file_handler = logging.FileHandler(log_path_name, encoding="UTF-8", mode='a')
     file_handler.setFormatter(logging.Formatter(fmt=log_format, datefmt=date_format, style=style, defaults=defaults))
