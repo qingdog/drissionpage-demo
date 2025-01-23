@@ -58,7 +58,7 @@ def create_file_handler(log_path_name=None, log_format="%[%(asctime)] - [%(filen
                 pass  # 这里什么也不做，因为 open 已经完成了文件创建
                 print("创建日志文件成功。。。")
 
-    file_handler = logging.FileHandler(log_path_name, encoding="UTF-8", mode='a')
+    file_handler = logging.FileHandler("week.log", encoding="UTF-8", mode='a')
     file_handler.setFormatter(logging.Formatter(fmt=log_format, datefmt=date_format, style=style, defaults=defaults))
     return file_handler
 
