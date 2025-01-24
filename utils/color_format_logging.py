@@ -48,8 +48,8 @@ def create_file_handler(log_path_name=None, log_format="%[%(asctime)] - [%(filen
 
     dir_path = os.path.dirname(log_path_name)
     if not os.path.exists(dir_path):
-        # os.makedirs(dir_path)  # 创建目录
-        logging.info(f"创建目录：{dir_path}")
+        os.makedirs(dir_path)  # 创建目录
+        print(f"\033[33m创建目录：{dir_path}\033[0m")
 
     file_handler = logging.FileHandler(log_path_name, encoding="UTF-8", mode='a')
     file_handler.setFormatter(logging.Formatter(fmt=log_format, datefmt=date_format, style=style, defaults=defaults))
