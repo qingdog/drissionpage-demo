@@ -45,7 +45,9 @@ def create_file_handler(log_path_name=None, log_format="%[%(asctime)] - [%(filen
         # 构造日志文件路径：年月周
         #log_path = os.path.join(current_directory, "logs")
         log_path = current_directory
-        print(log_path)
+        logging.getLogger().setLevel(logging.INFO)
+        logging.error("=======================================")
+        logging.info(log_path)
         log_path_name = os.path.join(log_path, f'{today.strftime("%Y%m")}_{week}.log')
         log_path_name = "week.log"
 
