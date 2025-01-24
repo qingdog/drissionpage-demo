@@ -257,11 +257,11 @@ def main():
     chromium_options = ChromiumOptions()
     if os_name != "Windows":
         user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
-        chromium_options.headless(on_off=True).set_user_agent(user_agent).set_argument('--window-size', '1920, 1080')
-        chromium_options.set_argument('--start-maximized')
+        chromium_options.headless(on_off=False).set_user_agent(user_agent).set_argument('--window-size', '1920, 1080')
+        # chromium_options.set_argument('--start-maximized')
         chromium_options.set_argument("--no-sandbox")
-        chromium_options.set_argument("--disable-setuid-sandbox")
-        chromium_options.set_argument("--headless=new")  # 无界面系统添加
+        # chromium_options.set_argument("--disable-setuid-sandbox")
+        # chromium_options.set_argument("--headless=new")  # 无界面系统添加
         #chromium_options.incognito(on_off=True)  # chrome.exe --incognito
     else:
         user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
