@@ -122,7 +122,8 @@ def click_cloudflare_turnstile(tab: MixTab, button: ChromiumElement = None):
                 console.log(document.querySelector('#cf-turnstile'))
                 return document.querySelector('#cf-turnstile').getBoundingClientRect().width;
                 """)
-            logger.info(width, height)
+            logger.info(f"width: {width}, height: {height}")
+
             button.click()
             tab.scroll.down(61)
             # tab.get_screenshot(path='temp', name='wait_click1_hide.jpg', full_page=True)
