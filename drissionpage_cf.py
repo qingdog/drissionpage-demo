@@ -110,7 +110,7 @@ def click_cloudflare_turnstile(tab: MixTab, button: ChromiumElement = None):
     try:
         if cf_turnstile_ele.states.has_rect:
             top_left, top_right, bottom_right, bottom_left = cf_turnstile_ele.states.has_rect
-            logger.info(top_left, top_right, bottom_right, bottom_left)
+            logger.info(f"top_left: {top_left}, top_right: {top_right}, bottom_right: {bottom_right}, bottom_left: {bottom_left}")
             width, height = tab.eles('css:#cf-turnstile')[0].rect.size
             logger.info(f"{width, height}: {tab.eles('css:#cf-turnstile')[0]}")
             # tab.eles('css:#cf-turnstile')[0].click.at(offset_x=28, offset_y=32)
