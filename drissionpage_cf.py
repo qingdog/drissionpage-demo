@@ -255,14 +255,14 @@ def main():
     os_name = platform.system()
     chromium_options = ChromiumOptions()
     if os_name != "Windows":
-        # TODO: 获取ubuntu2204的chrome的 user_agent版本，设置到无头模式中
         chromium_options.headless(on_off=True).set_argument('--window-size', '1920, 1080')
         "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/133.0.0.0 Safari/537.36"
         chromium_options.set_user_agent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36")
         # chromium_options.set_argument('--start-maximized')
         chromium_options.set_argument("--no-sandbox")
-        # chromium_options.set_argument("--disable-setuid-sandbox")
-        # chromium_options.set_argument("--headless=new")  # 无界面系统添加
+        #
+        chromium_options.set_argument("--disable-setuid-sandbox")
+        chromium_options.set_argument("--headless=new")  # 无界面系统添加
         chromium_options.incognito(on_off=True)  # chrome.exe --incognito
     else:
         chromium_options.headless(on_off=False).set_argument('--window-size', '1920, 1080')
