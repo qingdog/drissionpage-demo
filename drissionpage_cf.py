@@ -278,17 +278,18 @@ def main():
         # tab.screencast.start()  # 开始录制
 
         user_agent = tab.run_js("""
-                        return navigator.userAgent;
-                        """)
-        logging.info(user_agent)
-        tab.get("https://useragent.buyaocha.com/")
-        ua = tab.ele('css=table.mt-2.table.table-sm.table-bordered')
-        logging.info(ua.text)
+            return navigator.userAgent;
+            """)
+        logger.info(user_agent)
+        tab.get("https://tool.ip138.com/useragent/")
+        ua = tab.ele('css=div.form-control.form-control-none')
+        if ua:
+            logger.info(ua.text)
 
         load_dotenv()
         token = os.getenv("EGG_SESS")
         time.sleep(1)
-        god_checkin(tab, token)
+        # god_checkin(tab, token)
         # god_index(tab, token)
 
         # tab.screencast.stop(video_name="headless.mp4")
