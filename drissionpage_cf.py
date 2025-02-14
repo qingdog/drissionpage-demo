@@ -123,7 +123,6 @@ def click_cloudflare_turnstile(tab: MixTab, button: ChromiumElement = None):
                 return document.querySelector('#cf-turnstile').getBoundingClientRect().width;
                 """)
             logger.info(f"width: {width}, height: {height}")
-
             button.click()
             tab.scroll.down(61)
             # tab.get_screenshot(path='temp', name='wait_click1_hide.jpg', full_page=True)
@@ -256,25 +255,35 @@ def main():
     os_name = platform.system()
     chromium_options = ChromiumOptions()
     if os_name != "Windows":
-        user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
-        chromium_options.headless(on_off=True).set_user_agent(user_agent)#.set_argument('--window-size', '1920, 1080')
-        chromium_options.set_argument('--start-maximized')
+        # TODO: 获取ubuntu2204的chrome的 user_agent版本，设置到无头模式中
+        chromium_options.headless(on_off=True).set_argument('--window-size', '1920, 1080')
+        # chromium_options.set_user_agent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36")
+        # chromium_options.set_argument('--start-maximized')
         chromium_options.set_argument("--no-sandbox")
         # chromium_options.set_argument("--disable-setuid-sandbox")
-        chromium_options.set_argument("--headless=new")  # 无界面系统添加
-        #chromium_options.incognito(on_off=True)  # chrome.exe --incognito
+        # chromium_options.set_argument("--headless=new")  # 无界面系统添加
+        chromium_options.incognito(on_off=True)  # chrome.exe --incognito
     else:
-        user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
-        chromium_options.headless(on_off=True).set_user_agent(user_agent).set_argument('--window-size', '1920, 1080')
-        chromium_options.set_argument("--no-sandbox")
-        chromium_options.set_argument("--disable-setuid-sandbox")
-        chromium_options.set_argument("--headless=new")  # 无界面系统添加
+        chromium_options.headless(on_off=False).set_argument('--window-size', '1920, 1080')
+        chromium_options.incognito(True)
+        # chromium_options.set_argument("--no-sandbox")
+        # chromium_options.set_argument("--disable-setuid-sandbox")
+        # chromium_options.set_argument("--headless=new")  # 无界面系统添加
     # 设置加载图片、静音
     chromium_options.no_imgs(False).mute(True)
     # https://drissionpage.cn/versions/4.0.x #linux取消了自动无头模式浏览器，使用 chrome 关键字路径
     chromium_page = ChromiumPage(chromium_options.set_load_mode('normal').set_paths(browser_path=None))
     try:
         tab = Chromium().latest_tab
+        # tab.screencast.start()  # 开始录制
+
+        user_agent = tab.run_js("""
+                        return navigator.userAgent;
+                        """)
+        logging.info(user_agent)
+        tab.get("https://useragent.buyaocha.com/")
+        ua = tab.ele('css=table.mt-2.table.table-sm.table-bordered')
+        logging.info(ua.text)
 
         load_dotenv()
         token = os.getenv("EGG_SESS")
@@ -282,12 +291,13 @@ def main():
         god_checkin(tab, token)
         # god_index(tab, token)
 
+        # tab.screencast.stop(video_name="headless.mp4")
         # logger.info(f"cf-turnstile-response: {etree.HTML(tab.html).xpath('//*[@name="cf-turnstile-response"]')}")
     except Exception as e:
         raise e
     finally:
         logger.info("done.")
-        time.sleep(60)
+        time.sleep(10)
         chromium_page.quit()  # 关闭浏览器
 
 
@@ -310,7 +320,7 @@ def init_logger_for_script_run():
     except Exception as e:
         print(f"\033[34m{traceback.format_exc()}\033[0m")
         _logger = logging.getLogger()
-        _logger.setLevel(logging.DEBUG)
+        _logger.setLevel(logging.INFO)
     return _logger
 
 
@@ -323,4 +333,4 @@ if __name__ == '__main__':
         main()
     except Exception:
         logger.critical(f"\033[34m{traceback.format_exc()}\033[0m")
-        main()  # 异常就重试一次
+        # main()  # 异常就重试一次
