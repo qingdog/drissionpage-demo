@@ -45,12 +45,11 @@ def god_checkin(tab: MixTab, token: str):
         logger.warning("疑似不在首页...")
     # tab.scroll.down(20)
 
-    css_buttons = tab.eles("css:button.ant-btn.css-1jr6e2p.ant-btn-default.ant-btn-color-default.ant-btn-variant-outlined")
-    tab.wait(30, 30)
-    # buttons = tab.eles("xpath=//button[span[text()='签到 领取2000积分']]")
-    buttons = css_buttons
+    # css_buttons = tab.eles("css:button.ant-btn.css-1jr6e2p.ant-btn-default.ant-btn-color-default.ant-btn-variant-outlined")
+    tab.wait(20, 30)
+    buttons = tab.eles("xpath=//button[span[text()='签到 领取2000积分']]")
     if len(buttons) == 0:
-        if len(css_buttons) > 0: logger.info(css_buttons[0].text)
+        if len(buttons) > 0: logger.info(buttons[0].text)
         logger.info("没有找到按钮")
         return
     button_el = buttons[0]
@@ -255,18 +254,19 @@ def main():
     os_name = platform.system()
     chromium_options = ChromiumOptions()
     if os_name != "Windows":
-        chromium_options.headless(on_off=True).set_argument('--window-size', '1920, 1080')
+        chromium_options.headless(on_off=False).set_argument('--window-size', '1920, 1080').incognito(on_off=True)  # chrome.exe --incognito
         "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/133.0.0.0 Safari/537.36"
         chromium_options.set_user_agent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36")
-        # chromium_options.set_argument('--start-maximized')
+        chromium_options.set_argument('--start-maximized')
         chromium_options.set_argument("--no-sandbox")
         #
         chromium_options.set_argument("--disable-setuid-sandbox")
         chromium_options.set_argument("--headless=new")  # 无界面系统添加
-        chromium_options.incognito(on_off=True)  # chrome.exe --incognito
     else:
-        chromium_options.headless(on_off=False).set_argument('--window-size', '1920, 1080')
+        chromium_options.headless(on_off=False).set_argument('--window-size', '1600, 1000')
         chromium_options.incognito(True)
+        chromium_options.set_user_agent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36")
+        chromium_options.set_argument('--start-maximized')
         # chromium_options.set_argument("--no-sandbox")
         # chromium_options.set_argument("--disable-setuid-sandbox")
         # chromium_options.set_argument("--headless=new")  # 无界面系统添加
