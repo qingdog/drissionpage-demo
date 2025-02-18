@@ -261,7 +261,7 @@ def main():
         chromium_options.set_argument("--no-sandbox")
         #
         # chromium_options.set_argument("--disable-setuid-sandbox")
-        # chromium_options.set_argument("--headless=new")  # 无界面系统添加
+        chromium_options.set_argument("--headless=new")  # 无界面系统添加
     else:
         chromium_options.headless(on_off=False).set_argument('--window-size', '1600, 1000')
         chromium_options.incognito(True)
